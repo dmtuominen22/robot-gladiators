@@ -120,33 +120,37 @@ var startGame = function() {
 
   // fight each enemy robot by looping over them and fighting them one at a time
   for (var i = 0; i < enemyInfo.length; i++) {
+    // check player stats
+    console.log(playerInfo);
+
     // if player is still alive, keep fighting
     if (playerInfo.health > 0) {
       // let player know what round they are in, remember that arrays start at 0 so it needs to have 1 added to it
-      window.alert('Welcome to Robot Gladiators! Round ' + (i + 1));
-      
-      // pick new enemy to fight based on the index of the enemy.names array
+      window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
+
+      // pick new enemy to fight based on the index of the enemyInfo array
       var pickedEnemyObj = enemyInfo[i];
 
-      // reset enemy.health before starting new fight
+      // set health for picked enemy
       pickedEnemyObj.health = randomNumber(40, 60);
 
-      // pass the picked enemy.name variable's value into the fight function, where it will assume the value of the enemy.name parameter
+      console.log(pickedEnemyObj);
+
+      // pass the pickedEnemyObj object variable's value into the fight function, where it will assume the value of the enemy parameter
       fight(pickedEnemyObj);
 
-      // if player is still alive and we're not at the last enemy in the array
-      while (playerInfo.health > 0 && enemy.health > 0) {
-        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-
+      // if player is still alive after the fight and we're not at the last enemy in the array
+      if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
         // ask if player wants to use the store before next round
         var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
-      
+
         // if yes, take them to the store() function
         if (storeConfirm) {
           shop();
         }
       }
     }
+
     // if player is not alive, break out of the loop and let endGame function run
     else {
       window.alert("You have lost your robot in battle! Game Over!");
@@ -162,20 +166,29 @@ var startGame = function() {
 var endGame = function() {
   window.alert("The game has now ended. Let's see how you did!");
 
-  // if player is still alive, player wins!
-  if (playerInfo.health > 0) {
-    window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + '.');
+  // check localStorage for high score, if it's not there, use 0
+  var highScore = localStorage.getItem("highscore");
+  if (highScore === null) {
+    highScore = 0;
+  }
+
+  // if player has more money than the high score, player has new high score!
+  if (playerInfo.money > highScore) {
+    localStorage.setItem("highscore", playerInfo.money);
+    localStorage.setItem("name", playerInfo.name);
+
+    alert(playerInfo.name + " now has the high score of " + playerInfo.money + "!");
   } else {
-    window.alert("You've lost your robot in battle!");
+    alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
   }
 
   // ask player if they'd like to play again
-  var playAgainConfirm = window.confirm('Would you like to play again?');
+  var playAgainConfirm = window.confirm("Would you like to play again?");
 
   if (playAgainConfirm) {
     startGame();
   } else {
-    window.alert('Thank you for playing Robot Gladiators! Come back soon!');
+    window.alert("Thank you for playing Robot Gladiators! Come back soon!");
   }
 };
 
