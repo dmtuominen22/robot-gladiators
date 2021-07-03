@@ -8,7 +8,7 @@ create a minimal viable product, or MVP.
 * JS
 
 ## Website
-https://lernantino.github.io/run-buddy/
+https://dmtuominen22.github.io/robot-gladiators/
 
 ## Contribution
 Made by Denise Tuominen
